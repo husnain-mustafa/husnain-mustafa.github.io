@@ -66,7 +66,10 @@ const flagship = {
   summary:
     "An application built from the ground up to make valuation report writing effortless. It parses evidence documents automatically, fact-checks them against source, automates the GIS analysis, drafts the report with AI, and runs QA checks before anything reaches a client. Built so the valuers are the pilots, not the passengers.",
   capabilities: [
-    { k: "Evidence parsing", v: "Reads and structures evidence documents automatically." },
+    {
+      k: "Evidence parsing",
+      v: "Parses both structured and unstructured evidence documents automatically.",
+    },
     { k: "Fact checking", v: "Cross-checks every claim against the source evidence." },
     { k: "GIS automation", v: "Runs the spatial and location analysis without manual steps." },
     { k: "AI drafting", v: "Writes the report from validated, structured inputs." },
@@ -186,17 +189,6 @@ export default function Home() {
       {/* HERO */}
       <section id="top" className="relative z-10">
         <div className="mx-auto max-w-[1120px] px-6 pb-20 pt-24 lg:pb-28">
-          <motion.div
-            {...(reduce ? {} : { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.5 } })}
-            className="inline-flex items-center gap-2.5 rounded-full border border-line py-1.5 pl-2.5 pr-3.5 text-xs text-muted"
-          >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-            </span>
-            Open to senior BI &amp; applied AI roles
-          </motion.div>
-
           <motion.h1
             {...(reduce
               ? {}
@@ -205,7 +197,7 @@ export default function Home() {
                   animate: { opacity: 1, y: 0 },
                   transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
                 })}
-            className="mt-7 max-w-[22ch] text-4xl font-medium leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-6xl"
+            className="max-w-[22ch] text-4xl font-medium leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-6xl"
           >
             Analytics, AI, and the systems around them.
           </motion.h1>
