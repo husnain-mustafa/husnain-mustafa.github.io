@@ -12,6 +12,12 @@ type Entry = {
 
 const entries: Entry[] = [
   {
+    year: "2018 — 2021",
+    tag: "Study",
+    title: "BS Electrical Engineering at LUMS",
+    note: "Lahore University of Management Sciences. Hybrid renewable energy feasibility modelling, and a comparative study of machine learning algorithms for gender and speaker recognition in Urdu recordings.",
+  },
+  {
     year: "2020",
     tag: "Work",
     title: "Freelance journalist",
@@ -82,10 +88,10 @@ const entries: Entry[] = [
 const filters = ["All", "Work", "Places", "Study"] as const;
 
 const currently = [
-  { k: "Music", v: "Producing and DJing" },
-  { k: "Games", v: "Long-time player, strategy and sims" },
-  { k: "Kitchen", v: "Cooking as the other form of systems thinking" },
-  { k: "Camera", v: "Photography — a growing set of frames" },
+  { k: "Music", v: "Guitar and production; open mics when I get the chance" },
+  { k: "Games", v: "FPS and RPG" },
+  { k: "Kitchen", v: "Baking, curries, and slow cooking" },
+  { k: "Photography", v: "Street and life photography" },
 ];
 
 export function RecordThread() {

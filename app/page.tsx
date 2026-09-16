@@ -153,7 +153,7 @@ const capabilities = [
 const now = [
   { k: "Building", v: "Production AI agents and Databricks pipelines at Cushman & Wakefield" },
   { k: "Learning", v: "Agent evaluation, and where LLM output stops being trustworthy" },
-  { k: "Based", v: "Warsaw, Poland — EU work authorisation" },
+  { k: "Based", v: "Warsaw, Poland" },
 ];
 
 export default function Home() {
@@ -205,9 +205,9 @@ export default function Home() {
                   animate: { opacity: 1, y: 0 },
                   transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
                 })}
-            className="mt-7 max-w-[19ch] text-4xl font-medium leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-6xl"
+            className="mt-7 max-w-[22ch] text-4xl font-medium leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-6xl"
           >
-            Data systems that hold up in production.
+            Analytics, AI, and the systems around them.
           </motion.h1>
 
           <motion.p
@@ -256,13 +256,12 @@ export default function Home() {
             {...(reduce
               ? {}
               : { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.6, delay: 0.35 } })}
-            className="mt-16 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-line pt-7 sm:grid-cols-4"
+            className="mt-16 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-line pt-7 sm:grid-cols-3"
           >
             {[
               ["Role", "Analytics Engineer"],
-              ["Base", "Warsaw, PL"],
+              ["Base", "Warsaw, Poland"],
               ["Focus", "Agents · Cloud data"],
-              ["Status", "EU work authorisation"],
             ].map(([k, v]) => (
               <div key={k}>
                 <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">{k}</dt>
@@ -586,12 +585,11 @@ export default function Home() {
                 </span>
                 <ArrowUpRight className="h-4 w-4 text-faint" strokeWidth={1.75} />
               </a>
-              <div className="flex items-center justify-between border-y border-line py-4 text-sm text-ink">
+              <div className="flex items-center border-y border-line py-4 text-sm text-ink">
                 <span className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-muted" strokeWidth={1.75} />
                   Warsaw, Poland
                 </span>
-                <span className="font-mono text-xs text-faint">EU</span>
               </div>
 
               <div className="flex gap-3 pt-5">

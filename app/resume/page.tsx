@@ -181,7 +181,7 @@ export default function ResumePage() {
               Analytics Engineer · Applied AI &amp; Data Engineering
             </p>
             <p className="mt-4 font-mono text-[11px] leading-relaxed text-faint">
-              husnainchnaz@outlook.com · +48 666 022 047 · Warsaw, PL · EU work authorisation
+              husnainchnaz@outlook.com · +48 666 022 047 · Warsaw, Poland
               <br />
               linkedin.com/in/husnain-mustafa · github.com/husnain-mustafa
             </p>
