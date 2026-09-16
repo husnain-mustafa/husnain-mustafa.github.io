@@ -10,7 +10,6 @@ import {
   Copy,
   Check,
   Mail,
-  Phone,
   MapPin,
 } from "lucide-react";
 import { SiteHeader } from "./components/site-header";
@@ -265,7 +264,7 @@ export default function Home() {
       </section>
 
       {/* 01 — WORK */}
-      <section id="work" className="relative z-10 border-t border-line">
+      <section id="work" className="relative z-10 scroll-mt-20 border-t border-line">
         <div className="mx-auto max-w-[1120px] px-6 py-20 lg:py-24">
           <motion.div {...reveal()}>
             <SectionLabel index="01">Selected work</SectionLabel>
@@ -408,7 +407,7 @@ export default function Home() {
       </section>
 
       {/* 02 — METHOD */}
-      <section id="method" className="relative z-10 border-t border-line">
+      <section id="method" className="relative z-10 scroll-mt-20 border-t border-line">
         <div className="mx-auto max-w-[1120px] px-6 py-20 lg:py-24">
           <motion.div {...reveal()}>
             <SectionLabel index="02">How the work runs</SectionLabel>
@@ -423,7 +422,7 @@ export default function Home() {
       </section>
 
       {/* 03 — EXPERIENCE + EDUCATION */}
-      <section id="experience" className="relative z-10 border-t border-line">
+      <section id="experience" className="relative z-10 scroll-mt-20 border-t border-line">
         <div className="mx-auto max-w-[1120px] px-6 py-20 lg:py-24">
           <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-10">
             <motion.div {...reveal()} className="lg:col-span-8">
@@ -468,7 +467,7 @@ export default function Home() {
       </section>
 
       {/* 04 — CAPABILITIES */}
-      <section id="capabilities" className="relative z-10 border-t border-line">
+      <section id="capabilities" className="relative z-10 scroll-mt-20 border-t border-line">
         <div className="mx-auto max-w-[1120px] px-6 py-20 lg:py-24">
           <motion.div {...reveal()}>
             <SectionLabel index="04">Capabilities</SectionLabel>
@@ -501,7 +500,7 @@ export default function Home() {
       </section>
 
       {/* 05 — NOW */}
-      <section id="now" className="relative z-10 border-t border-line">
+      <section id="now" className="relative z-10 scroll-mt-20 border-t border-line">
         <div className="mx-auto max-w-[1120px] px-6 py-20 lg:py-24">
           <motion.div {...reveal()}>
             <SectionLabel index="05">Now</SectionLabel>
@@ -533,7 +532,7 @@ export default function Home() {
       </section>
 
       {/* 06 — CONTACT */}
-      <section id="contact" className="relative z-10 border-t border-line">
+      <section id="contact" className="relative z-10 scroll-mt-20 border-t border-line">
         <div className="mx-auto max-w-[1120px] px-6 py-20 lg:py-28">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
             <motion.div {...reveal()} className="lg:col-span-7">
@@ -567,16 +566,6 @@ export default function Home() {
                   <Copy className="h-4 w-4 text-faint" strokeWidth={1.75} />
                 )}
               </button>
-              <a
-                href="tel:+48666022047"
-                className="flex items-center justify-between border-t border-line py-4 text-sm text-ink transition-colors hover:text-accent"
-              >
-                <span className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 text-muted" strokeWidth={1.75} />
-                  +48 666 022 047
-                </span>
-                <ArrowUpRight className="h-4 w-4 text-faint" strokeWidth={1.75} />
-              </a>
               <div className="flex items-center border-y border-line py-4 text-sm text-ink">
                 <span className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-muted" strokeWidth={1.75} />
