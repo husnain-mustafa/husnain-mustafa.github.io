@@ -11,9 +11,9 @@ import {
 } from "./charts";
 
 export const metadata: Metadata = {
-  title: "IMF Text Analysis — the effect of dictionary balance | Husnain Mustafa",
+  title: "IMF Text Analysis: the effect of dictionary balance | Husnain Mustafa",
   description:
-    "Master's thesis finding: how dictionary balance decides which topics text analysis can detect — across 173 IMF communiqués and 564 constituency statements.",
+    "Master's thesis finding: how dictionary balance decides which topics text analysis can detect, across 173 IMF communiqués and 564 constituency statements.",
 };
 
 const meta = [
@@ -26,10 +26,10 @@ const meta = [
 
 export default function ImfCaseStudy() {
   return (
-    <div className="relative min-h-screen bg-bg text-ink antialiased">
+    <div className="relative min-h-dvh bg-bg text-ink antialiased">
       <SiteHeader />
 
-      <main className="relative z-10 mx-auto max-w-[1120px] px-6 pb-24 pt-16">
+      <main className="relative z-10 mx-auto max-w-[1120px] px-6 pb-24 pt-16 sm:pt-20 lg:pt-24">
         <Link
           href="/#work"
           className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-faint transition-colors hover:text-ink"
@@ -88,7 +88,7 @@ export default function ImfCaseStudy() {
 
         <section className="mt-14">
           <h2 className="text-xl font-medium tracking-tight text-ink sm:text-2xl">
-            Finding 1 — the collapse
+            Finding 1: the collapse
           </h2>
           <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
             Across all 173 communiqués, the balanced dictionary produces a plausible spread of
@@ -102,7 +102,7 @@ export default function ImfCaseStudy() {
 
         <section className="mt-16">
           <h2 className="text-xl font-medium tracking-tight text-ink sm:text-2xl">
-            Finding 2 — the unbalanced dictionary erases every country
+            Finding 2: the unbalanced dictionary erases every country
           </h2>
           <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
             This is where it stops being abstract. Scored with the balanced dictionary, each
@@ -111,7 +111,7 @@ export default function ImfCaseStudy() {
             attention of the group at 25%. Scored with the unbalanced dictionary, all six become the
             same country. Crisis lands between 38% and 57% for every one of them, Risk between 32%
             and 42%, and Debt is <span className="text-ink">0.00 across the board</span>. A method in
-            this state cannot support cross-country comparison at all — it will find a crisis
+            this state cannot support cross-country comparison at all: it will find a crisis
             everywhere it looks.
           </p>
           <AuthorityComparison />
@@ -119,13 +119,13 @@ export default function ImfCaseStudy() {
 
         <section className="mt-16">
           <h2 className="text-xl font-medium tracking-tight text-ink sm:text-2xl">
-            Finding 3 — what the balanced dictionary reveals
+            Finding 3: what the balanced dictionary reveals
           </h2>
           <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
             With the dictionary balanced, the corpus reads like an economic history. Crisis spikes to
             34% in 2009, exactly where the financial crisis sits. Debt collapses to 3% during the
             same window, then climbs to 41% in 2020 and stays near 40% into 2024. Economic Growth
-            dominates the calm years — 2012 and 2023 in particular. None of this is visible under the
+            dominates the calm years, 2012 and 2023 in particular. None of this is visible under the
             unbalanced dictionary, which reports a flat crisis narrative through the entire period.
           </p>
           <TopicTimeline />
@@ -133,11 +133,11 @@ export default function ImfCaseStudy() {
 
         <section className="mt-16">
           <h2 className="text-xl font-medium tracking-tight text-ink sm:text-2xl">
-            Finding 4 — sentiment agrees, weakly
+            Finding 4: sentiment agrees, weakly
           </h2>
           <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
-            Supplemental VADER sentiment moves with the same crises — dips in 2008–09 (0.84, 0.83),
-            2015–16 (0.93, 0.94), 2020 (0.83) and 2022 (0.79), recovering to 0.99 in calm years. The
+            Supplemental VADER sentiment moves with the same crises: dips in 2008 to 2009 (0.84, 0.83),
+            2015 to 2016 (0.93, 0.94), 2020 (0.83) and 2022 (0.79), recovering to 0.99 in calm years. The
             direction is consistent with the topic findings; the magnitude is not trustworthy, since
             VADER saturates on long formal text. It is a useful corroborating signal and a poor
             primary one.
@@ -152,7 +152,7 @@ export default function ImfCaseStudy() {
           <ul className="mt-5 max-w-[72ch] space-y-3">
             {[
               "The balanced dictionaries were built by manual term selection guided by frequency analysis. That is a judgement call, and it introduces subjectivity even as it removes another kind.",
-              "Communiqués span 1997–2024; constituency statements span 2004–2024. Coverage thins after 2017 — fewer than five statements per year in places — so those points are noisy, and the thin-coverage band is drawn where that begins.",
+              "Communiqués span 1997 to 2024; constituency statements span 2004 to 2024. Coverage thins after 2017, fewer than five statements per year in places, so those points are noisy, and the thin-coverage band is drawn where that begins.",
               "Topic shares are means of per-document normalised assignments, not raw counts, so they describe emphasis rather than volume.",
               "VADER compound saturates near 1.0 on long documents; the relative dips are more informative than the absolute values.",
               "The LDA pass is unsupervised and supplementary. It surfaced broader themes (IMF Governance & Reform; Climate & Pandemic) but lacks the dictionary method's transparency, so the two are complementary rather than equivalent.",

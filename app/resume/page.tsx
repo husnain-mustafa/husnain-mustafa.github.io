@@ -5,7 +5,7 @@ import { PrintButton } from "../components/print-button";
 export const metadata: Metadata = {
   title: "Résumé | Husnain Mustafa",
   description:
-    "Résumé of Husnain Mustafa — Analytics Engineer working across applied AI, Databricks, and enterprise analytics.",
+    "Résumé of Husnain Mustafa, Analytics Engineer working across applied AI, Databricks, and enterprise analytics.",
 };
 
 type Job = {
@@ -23,12 +23,12 @@ const experience: Job[] = [
     org: "Cushman & Wakefield",
     sector: "Real Estate",
     place: "Warsaw, PL",
-    period: "Jun 2024 — Present",
+    period: "Jun 2024 to Present",
     role: "Analytics Engineer",
     progression:
-      "Previously Business Intelligence Analyst, AI & ML (2025–2026) · Junior BI Analyst (2024–2025)",
+      "Previously Business Intelligence Analyst (Aug 2025 to Oct 2026) · Junior BI Analyst (Jun 2024 to Aug 2025)",
     bullets: [
-      "Designed, built, and shipped the Report Valuation Workspace from the ground up: automated evidence-document parsing, fact-checking, GIS analysis, AI report drafting, and QA checks — built so the valuers stay the pilots rather than the passengers. (React, Databricks)",
+      "Designed, built, and shipped the Report Valuation Workspace from the ground up: automated evidence-document parsing, fact-checking, GIS analysis, AI report drafting, and QA checks, built so the valuers stay the pilots rather than the passengers. (React, Databricks)",
       "Shipped a Copilot Studio QA agent EMEA-wide for quality assurance across valuation reports, automating proofreading, validation, and fact-checking before release.",
       "Built data pipelines across several business functions, then built and tested Genie agents on top for quick data answers, analysis, visualisation, and lead generation.",
       "Leading proof-of-concept work on predictive modelling for capital markets, experimenting with targets, features, and modelling approaches to evaluate feasibility and impact.",
@@ -42,7 +42,7 @@ const experience: Job[] = [
     org: "Nokia Solutions and Networks",
     sector: "Telecommunications",
     place: "Warsaw, PL",
-    period: "Feb 2023 — Jun 2024",
+    period: "Feb 2023 to Jun 2024",
     role: "Working Student, Business Applications",
     bullets: [
       "Worked on machine learning and data analysis projects within the Business Applications team, supporting production and research use cases.",
@@ -54,7 +54,7 @@ const experience: Job[] = [
     org: "Power Technology Research",
     sector: "Market Research",
     place: "Lahore, PK",
-    period: "Jul 2022 — Oct 2022",
+    period: "Jul 2022 to Oct 2022",
     role: "Junior Analyst, eMobility",
     bullets: [
       "Collected data on EV users, EVSE competitors, and the marketplace, consolidating it into databases, reports, and presentations.",
@@ -65,9 +65,9 @@ const experience: Job[] = [
     org: "Ufone",
     sector: "Telecommunications",
     place: "Lahore, PK",
-    period: "Oct 2021 — Jul 2022",
+    period: "Oct 2021 to Jul 2022",
     role: "Executive, RF Optimisation",
-    progression: "Previously Management Trainee (Oct 2021 — Apr 2022)",
+    progression: "Previously Management Trainee (Oct 2021 to Apr 2022)",
     bullets: [
       "Developed Power BI dashboards to improve network KPI monitoring and analysis.",
       "Improved daily worst-cell analysis to escalate issues with the vendor in good time.",
@@ -78,7 +78,7 @@ const experience: Job[] = [
     org: "Integriti",
     sector: "IT Services & Consulting",
     place: "Lahore, PK",
-    period: "May 2021 — Oct 2021",
+    period: "May 2021 to Oct 2021",
     role: "Technical Support Specialist",
     bullets: [],
   },
@@ -86,16 +86,8 @@ const experience: Job[] = [
     org: "foodpanda",
     sector: "Internet Marketplace",
     place: "Lahore, PK",
-    period: "Feb 2021 — Mar 2021",
+    period: "Feb 2021 to Mar 2021",
     role: "Automation Engineer Trainee",
-    bullets: [],
-  },
-  {
-    org: "Freelance",
-    sector: "Editorial",
-    place: "Lahore, PK",
-    period: "Jun 2020 — May 2021",
-    role: "Freelance Journalist",
     bullets: [],
   },
 ];
@@ -105,7 +97,7 @@ const education = [
     degree: "MA Data Science & Business Analytics",
     org: "University of Warsaw",
     place: "Warsaw, PL",
-    period: "2022 — 2024",
+    period: "2022 to 2024",
     notes: [
       "Thesis: NLP-driven text analytics on IMF statements and communiqués, evaluating how dictionary balance influences topic modelling, sentiment analysis, and long-term thematic trends across two decades.",
     ],
@@ -114,7 +106,7 @@ const education = [
     degree: "BS Electrical Engineering",
     org: "Lahore University of Management Sciences",
     place: "Lahore, PK",
-    period: "2018 — 2021",
+    period: "2018 to 2021",
     notes: [
       "Hybrid Renewable Energy Systems: developed an index for the economic and environmental feasibility of deploying a hybrid electric power system across locations in Pakistan.",
       "Gender and Speaker Recognition: compared machine learning algorithms for gender and speaker recognition in Urdu recordings.",
@@ -124,14 +116,14 @@ const education = [
     degree: "FSc, Engineering",
     org: "Forman Christian College (A Chartered University)",
     place: "Lahore, PK",
-    period: "2015 — 2017",
+    period: "2015 to 2017",
     notes: [],
   },
   {
     degree: "Matric, Sciences",
     org: "The Punjab School",
     place: "Lahore, PK",
-    period: "2011 — 2014",
+    period: "2011 to 2014",
     notes: [],
   },
 ];
@@ -170,10 +162,10 @@ const certifications = [
 
 export default function ResumePage() {
   return (
-    <div className="relative min-h-screen bg-bg text-ink antialiased">
+    <div className="relative min-h-dvh bg-bg text-ink antialiased">
       <SiteHeader />
 
-      <main className="mx-auto max-w-[820px] px-6 pb-24 pt-16">
+      <main className="mx-auto max-w-[820px] px-6 pb-24 pt-16 sm:pt-20 lg:pt-24">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
           <div>
             <h1 className="text-3xl font-medium tracking-[-0.03em] text-ink">Husnain Mustafa</h1>
@@ -196,7 +188,7 @@ export default function ResumePage() {
           <p className="mt-4 max-w-[74ch] text-sm leading-relaxed text-muted">
             Electrical engineer with a master&rsquo;s in Data Science and a broad analytical
             background across telecommunications, renewable energy markets, and real estate. I work
-            between data engineering and the business — building production AI agents, Databricks
+            between data engineering and the business, building production AI agents, Databricks
             semantic models, and the internal applications around them.
           </p>
         </section>
@@ -297,14 +289,11 @@ export default function ResumePage() {
               Languages
             </h2>
             <ul className="mt-5 space-y-2 text-sm text-muted">
-              <li>English — C2</li>
-              <li>Urdu — native</li>
-              <li>Punjabi — native</li>
-              <li>Polish — elementary</li>
+              <li>English: C2</li>
+              <li>Urdu: native</li>
+              <li>Punjabi: native</li>
+              <li>Polish: elementary</li>
             </ul>
-            <p className="mt-5 text-sm text-muted">
-              <span className="text-ink">Honours:</span> Talent Award
-            </p>
           </div>
         </section>
       </main>

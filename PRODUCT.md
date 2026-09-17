@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Next.js (App Router), TypeScript, Tailwind CSS, Motion (Framer Motion), Phosphor / Lucide Icons
+Next.js (App Router), TypeScript, Tailwind CSS, Motion, Lucide Icons
 
 ## Users
 
@@ -20,7 +20,7 @@ A high-end personal portfolio website showcasing Husnain Mustafa's professional 
 
 ## Positioning
 
-A sleek, modern, editorial portfolio that bridges enterprise data engineering and applied AI consulting. It stands out through sophisticated minimalist design, rigorous typographic hierarchy, and interactive proof points of production-grade AI agent deployments.
+A sleek, modern, editorial portfolio that bridges enterprise data engineering and applied AI consulting. It stands out through a seven-panel colour-block scroll deck, a terminal-styled profile summary, rigorous typographic hierarchy, and interactive proof points of production-grade AI agent deployments.
 
 ## Operating Context
 
@@ -28,29 +28,30 @@ Evaluated on desktop and mobile by recruiters and engineering leaders in fast-pa
 
 ## Capabilities and Constraints
 
-- Fully responsive layout optimized for all viewports.
-- Interactive case study showcases and filterable skills/tech stack.
-- Direct contact and social links (GitHub, LinkedIn, email, phone).
-- Clean, production-ready codebase built with modern web standards.
+- Single-scroll home deck: Intro, Work, Toolkit, Journey, Bench, Record, Contact.
+- Toolkit groups skills by purpose (model, ship, build, report) with colour-coded groups.
+- Deep pages: résumé (printable) and the IMF Text Analysis case study.
+- Direct contact and social links (email, GitHub, LinkedIn, résumé).
+- Responsive layout, keyboard navigable, AA-contrast checked; motion honours `prefers-reduced-motion`.
 
 ## Brand Commitments
 
 - Professional name: Husnain Mustafa
 - Tone: Professional, authoritative, modern, refined, clear
-- Visual identity: Clean minimal editorial aesthetic with strong typographic contrast.
+- Visual identity: Editorial colour-block deck on a light paper base, with strong typographic contrast.
 
 ## Evidence on Hand
 
 - Verified professional experience at Cushman & Wakefield, Nokia, Power Technology Research, and Ufone.
-- Key projects: Production AI Agent for Report Validation, Databricks Genie Agent, IMF Communique NLP Analysis.
+- Key projects: Report Valuation Workspace, QA Checker for Valuation, Databricks Genie Agents, IMF Communique analysis.
 - Education: MA Data Science & Business Analytics (University of Warsaw), BS Electrical Engineering (LUMS).
 
 ## Product Principles
 
-1. **Clarity & Impact**: Highlight quantitative business impact and production-grade deployments upfront.
-2. **Refined Craft**: Impeccable typography, generous spacing, and smooth micro-interactions that feel expensive and intentional.
-3. **Frictionless Discovery**: Make it effortless for recruiters and clients to scan experience, examine projects, and get in touch.
+1. **Clarity & Impact**: Highlight production-grade deployments and the progression behind them.
+2. **Refined Craft**: Impeccable typography, deliberate colour, and motion that feels intentional.
+3. **Frictionless Discovery**: Make it effortless to scan work, skills, journey, and get in touch.
 
 ## Accessibility & Inclusion
 
-WCAG AA contrast compliance, keyboard navigability, and responsive readability across devices.
+WCAG AA contrast compliance, visible keyboard focus on every surface colour, keyboard navigability, and responsive readability across devices.

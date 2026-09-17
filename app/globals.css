@@ -2,38 +2,47 @@
 
 /* ============================================================
    SEMANTIC TOKENS
-   Dark is the default. Light overrides via [data-theme="light"].
+   Light only. Colour-block palette: paper, ink, forest, terra,
+   sand, cobalt, plus the terminal signal colours.
    Utilities (bg-bg, text-ink, border-line, ...) come from @theme.
    ============================================================ */
 :root {
-  --bg: #0a0a0b;
-  --surface: #101013;
-  --line: rgba(255, 255, 255, 0.09);
-  --line-strong: rgba(255, 255, 255, 0.16);
-  --ink: #e8e8ec;
-  --muted: #9a9aa3;
-  --faint: #5f5f68;
-  --accent: #34d399;
-  --accent-ink: #0a0a0b;
-  --grid-line: rgba(255, 255, 255, 0.035);
-  --shadow: 0 1px 0 0 rgba(255, 255, 255, 0.04) inset;
-}
+  --paper: #f4f1ea;
+  --ink: #0f0f10;
+  --forest: #0b4f3a;
+  --terra: #b8442c;
+  --terra-deep: #a83d26;
+  --sand: #e7dfce;
+  --cobalt: #173f7a;
 
-[data-theme="light"] {
-  --bg: #f6f6f4;
+  --bg: #f4f1ea;
   --surface: #ffffff;
-  --line: rgba(9, 9, 12, 0.1);
-  --line-strong: rgba(9, 9, 12, 0.2);
-  --ink: #0d0d0f;
-  --muted: #55555c;
-  --faint: #8a8a93;
-  --accent: #047857;
-  --accent-ink: #ffffff;
-  --grid-line: rgba(9, 9, 12, 0.045);
-  --shadow: 0 1px 2px 0 rgba(9, 9, 12, 0.04);
+  --line: rgba(15, 15, 16, 0.12);
+  --line-strong: rgba(15, 15, 16, 0.24);
+  --muted: #5d5a50;
+  --faint: #6e6c62;
+  --accent: #0b4f3a;
+  --accent-ink: #f4f1ea;
+
+  /* Terminal / signal accents */
+  --term: #0b0b0d;
+  --signal: #7fe0b6;
+  --signal-warm: #e08a6a;
+  --mac-red: #e05a4a;
+  --mac-amber: #e0b04a;
+  --mac-green: #5fbf82;
+
+  /* Focus ring: overridden per surface so it is always visible */
+  --focus: var(--accent);
 }
 
 @theme inline {
+  --color-paper: var(--paper);
+  --color-sand: var(--sand);
+  --color-forest: var(--forest);
+  --color-terra: var(--terra);
+  --color-terra-deep: var(--terra-deep);
+  --color-cobalt: var(--cobalt);
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-line: var(--line);
@@ -43,16 +52,24 @@
   --color-faint: var(--faint);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
+  --color-term: var(--term);
+  --color-signal: var(--signal);
+  --color-signal-warm: var(--signal-warm);
+  --color-mac-red: var(--mac-red);
+  --color-mac-amber: var(--mac-amber);
+  --color-mac-green: var(--mac-green);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
-[data-theme="light"] {
-  color-scheme: light;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -62,39 +79,47 @@ body {
 }
 
 /* ============================================================
-   ENGINEERING GRID BACKDROP
+   DECK PANELS
+   Stacking only when the viewport is tall enough that a pinned
+   panel cannot clip its content. On short screens the deck falls
+   back to a normal document flow.
    ============================================================ */
-.engineering-grid {
-  background-image:
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, black, transparent);
-  -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, black, transparent);
+.deck-shell {
+  position: relative;
+  width: 100%;
+}
+
+.deck-pin {
+  display: flex;
+  min-height: 100dvh;
+  align-items: center;
+}
+
+@media (min-width: 768px) and (min-height: 720px) {
+  .deck-shell {
+    min-height: calc(100dvh + 30vh);
+  }
+  .deck-pin {
+    position: sticky;
+    top: 0;
+  }
+}
+
+/* Surfaces with dark backgrounds get a light focus ring, and
+   vice versa, so keyboard focus is visible on every panel. */
+.focus-on-dark {
+  --focus: var(--paper);
+}
+
+.focus-on-light {
+  --focus: var(--accent);
 }
 
 /* ============================================================
-   THEME TOGGLE ICONS (no JS state needed)
-   ============================================================ */
-.theme-toggle-moon {
-  display: none;
-}
-
-[data-theme="light"] .theme-toggle-sun {
-  display: none;
-}
-
-[data-theme="light"] .theme-toggle-moon {
-  display: block;
-}
-
-/* ============================================================
-   PRINT — used by /resume
+   PRINT
    ============================================================ */
 @media print {
-  :root,
-  [data-theme="dark"],
-  [data-theme="light"] {
+  :root {
     --bg: #ffffff;
     --surface: #ffffff;
     --line: rgba(0, 0, 0, 0.16);
@@ -104,7 +129,6 @@ body {
     --faint: #6b6b6b;
     --accent: #000000;
     --accent-ink: #ffffff;
-    --grid-line: transparent;
   }
 
   .no-print {
@@ -122,8 +146,16 @@ body {
     text-decoration: none !important;
   }
 
-  .engineering-grid {
-    display: none !important;
+  /* Unstack the deck so every panel prints in order */
+  .deck-shell,
+  .deck-pin {
+    position: static !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .deck-pin {
+    display: block !important;
   }
 
   @page {
@@ -149,24 +181,25 @@ body {
 
 /* Selection */
 ::selection {
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: color-mix(in srgb, var(--accent) 26%, transparent);
+  color: var(--ink);
 }
 
 /* Focus visible */
 *:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
+  border-radius: 2px;
 }
 
-/* Reduced motion */
+/* Reduced motion: kill decorative animation, keep short state
+   feedback (colour/border transitions) intact. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }

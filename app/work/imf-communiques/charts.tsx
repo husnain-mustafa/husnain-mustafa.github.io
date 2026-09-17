@@ -166,7 +166,7 @@ export function TopicTimeline() {
 
         {/* annotations */}
         <text x={px(YEARS.indexOf(2009))} y={py(0.34, max) - 10} textAnchor="middle" fontSize="9" className="fill-accent font-mono">
-          2008–09 crisis
+          2008 to 2009 crisis
         </text>
         <text x={px(YEARS.indexOf(2022))} y={py(0.30, max) + 16} textAnchor="middle" fontSize="9" className="fill-ink font-mono">
           debt surge
@@ -250,7 +250,7 @@ export function SentimentTimeline() {
         ))}
       </svg>
       <figcaption className="mt-5 font-mono text-[10px] uppercase tracking-[0.12em] text-faint">
-        Average VADER compound per statement · note the truncated axis (0.70–1.00) and that VADER
+        Average VADER compound per statement · note the truncated axis (0.70 to 1.00) and that VADER
         saturates on long text
       </figcaption>
     </figure>
@@ -328,7 +328,7 @@ export function AuthorityComparison() {
         <Heatmap title="Unbalanced dictionary" pick={(a) => a.unequal} />
       </div>
       <figcaption className="mt-6 font-mono text-[10px] uppercase tracking-[0.12em] text-faint">
-        Share of topic assignments per authority (%) · 564 constituency statements, 2004–2024
+        Share of topic assignments per authority (%) · 564 constituency statements, 2004 to 2024
       </figcaption>
     </figure>
   );

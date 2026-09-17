@@ -72,3 +72,8 @@ Modelfile-granite
 
 # Source portrait — web-ready copies live in public/
 Husnain Mustafa_JAR2603_S.jpg.jpeg
+
+# Design exploration mockups (local only, not part of the site)
+redesign-*.html
+toolkit-concepts.html
+journey-concepts.html
