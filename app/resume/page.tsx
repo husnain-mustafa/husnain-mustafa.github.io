@@ -1,11 +1,36 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { SiteHeader } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
 import { PrintButton } from "../components/print-button";
+import { EMAIL, SITE_DESCRIPTION, SITE_NAME, SITE_ROLE } from "../site";
 
 export const metadata: Metadata = {
-  title: "Résumé | Husnain Mustafa",
-  description:
-    "Résumé of Husnain Mustafa, Analytics Engineer working across applied AI, Databricks, and enterprise analytics.",
+  title: `Résumé | ${SITE_NAME}`,
+  description: `Résumé of ${SITE_NAME}, ${SITE_ROLE} working across applied AI, Databricks, and enterprise analytics.`,
+  alternates: { canonical: "/resume/" },
+  openGraph: {
+    type: "profile",
+    url: "/resume/",
+    siteName: SITE_NAME,
+    title: `Résumé | ${SITE_NAME}`,
+    description: `The printable, complete résumé of ${SITE_NAME}, ${SITE_ROLE} in Warsaw.`,
+    images: [
+      {
+        url: "/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME}, ${SITE_ROLE}, Warsaw`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Résumé | ${SITE_NAME}`,
+    description: SITE_DESCRIPTION,
+    images: ["/og.jpg"],
+  },
 };
 
 type Job = {
@@ -162,18 +187,29 @@ const certifications = [
 
 export default function ResumePage() {
   return (
-    <div className="relative min-h-dvh bg-bg text-ink antialiased">
+    <div className="relative flex min-h-dvh flex-col bg-bg text-ink antialiased">
       <SiteHeader />
 
-      <main className="mx-auto max-w-[820px] px-6 pb-24 pt-16 sm:pt-20 lg:pt-24">
-        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
+      <main
+        id="main"
+        className="mx-auto w-full max-w-[820px] flex-1 px-6 pb-24 pt-12 sm:pt-14 lg:pt-16"
+      >
+        <Link
+          href="/"
+          className="no-print inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-faint transition-colors hover:text-ink"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.75} />
+          Portfolio
+        </Link>
+
+        <div className="mt-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
           <div>
-            <h1 className="text-3xl font-medium tracking-[-0.03em] text-ink">Husnain Mustafa</h1>
+            <h1 className="text-3xl font-semibold tracking-[-0.035em] text-ink">Husnain Mustafa</h1>
             <p className="mt-2 text-sm text-muted">
               Analytics Engineer · Applied AI &amp; Data Engineering
             </p>
             <p className="mt-4 font-mono text-[11px] leading-relaxed text-faint">
-              husnainchnaz@outlook.com · Warsaw, Poland
+              {EMAIL} · Warsaw, Poland
               <br />
               linkedin.com/in/husnain-mustafa · github.com/husnain-mustafa
             </p>
@@ -297,6 +333,8 @@ export default function ResumePage() {
           </div>
         </section>
       </main>
+
+      <SiteFooter />
     </div>
   );
 }

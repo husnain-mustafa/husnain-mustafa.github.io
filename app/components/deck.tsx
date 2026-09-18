@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import {
   motion,
@@ -9,6 +16,7 @@ import {
   useScroll,
 } from "motion/react";
 import {
+  AlertCircle,
   ArrowRight,
   ArrowUpRight,
   BarChart3,
@@ -18,16 +26,31 @@ import {
   Code2,
   Copy,
   Globe,
-  Mail,
+  Languages,
   MapPin,
   Menu,
   X,
   type LucideIcon,
 } from "lucide-react";
+import { EMAIL, GITHUB, LINKEDIN } from "../site";
 
 /* ------------------------------------------------------------------ */
 /* Data                                                                */
 /* ------------------------------------------------------------------ */
+
+type Tone = "forest" | "paper" | "sand" | "ink" | "terra";
+
+const PANELS: { id: string; label: string; tone: Tone }[] = [
+  { id: "intro", label: "Intro", tone: "forest" },
+  { id: "work", label: "Work", tone: "paper" },
+  { id: "toolkit", label: "Toolkit", tone: "sand" },
+  { id: "journey", label: "Journey", tone: "ink" },
+  { id: "bench", label: "Bench", tone: "paper" },
+  { id: "record", label: "Record", tone: "ink" },
+  { id: "contact", label: "Contact", tone: "terra" },
+];
+
+const DARK_TONES: Tone[] = ["forest", "ink", "terra"];
 
 const links: { label: string; href: string; section?: number }[] = [
   { label: "Work", href: "#work", section: 1 },
@@ -37,8 +60,6 @@ const links: { label: string; href: string; section?: number }[] = [
   { label: "Record", href: "#record", section: 5 },
 ];
 
-const theme: ("dark" | "light")[] = ["dark", "light", "light", "dark", "light", "dark", "dark"];
-
 const terminalStats: [string, string][] = [
   ["experience", "5+ yrs"],
   ["roles", "6"],
@@ -46,7 +67,7 @@ const terminalStats: [string, string][] = [
   ["degrees", "2"],
 ];
 
-const employers = ["Cushman & Wakefield", "Nokia", "foodpanda", "Ufone"];
+const employers = ["Cushman & Wakefield", "Nokia", "Power Technology Research", "Ufone"];
 
 const flagship = {
   title: "Report Valuation Workspace",
@@ -82,7 +103,7 @@ const earlier: EarlierItem[] = [
     category: "Applied AI",
     year: "2024",
     detail:
-      "A Copilot Studio agent shipped EMEA-wide for quality assurance across valuation reports: automating proofreading, validation, and fact-checking before a report leaves the team.",
+      "A Copilot Studio agent shipped EMEA-wide to proofread, validate, and fact-check valuation reports before release.",
     tags: ["Copilot Studio", "AI Agents", "Power Platform"],
   },
   {
@@ -91,7 +112,7 @@ const earlier: EarlierItem[] = [
     category: "Cloud Data",
     year: "2024",
     detail:
-      "Built data pipelines spanning several business functions, then built and tested a Genie agent for each function for quick data answers, analysis, visualisation, and lead generation.",
+      "Databricks pipelines across several business functions, with a Genie agent per function for answers and analysis.",
     tags: ["Azure Databricks", "Genie", "Delta Lake", "PySpark"],
   },
   {
@@ -163,8 +184,6 @@ const experience = [
   { period: "2021", role: "Automation Engineer Trainee", org: "foodpanda", place: "Lahore" },
 ];
 
-const GITHUB = "https://github.com/husnain-mustafa";
-
 const bench = [
   {
     name: "Clustering Spotify Liked Songs",
@@ -221,6 +240,14 @@ const recordMilestones: RecordMilestone[] = [
   },
 ];
 
+const certifications = [
+  "Quantum Computing and Data Sciences",
+  "4G LTE Wireless Cellular Technology",
+  "Tableau 2020 A-Z",
+  "SIP Protocols",
+  "Information Security Awareness",
+];
+
 const currently = [
   { k: "Music", v: "Guitar and production; open mics when I get the chance" },
   { k: "Games", v: "FPS and RPG" },
@@ -264,6 +291,8 @@ function Panel({
   index,
   active,
   tone,
+  toneName,
+  stacked,
   className = "",
   children,
 }: {
@@ -271,6 +300,8 @@ function Panel({
   index: number;
   active: number;
   tone: "dark" | "light";
+  toneName: Tone;
+  stacked: boolean;
   className?: string;
   children: React.ReactNode;
 }) {
@@ -281,11 +312,12 @@ function Panel({
       id={id}
       data-deck
       data-index={index}
+      data-stack={stacked ? "true" : undefined}
       className={`deck-shell ${tone === "dark" ? "focus-on-dark" : "focus-on-light"} ${className}`}
     >
-      <div className="deck-pin">
+      <div className={`deck-pin wash-${toneName}`}>
         <div
-          className={`mx-auto w-full max-w-[1440px] px-6 py-24 transition-[transform,opacity] duration-700 ease-out sm:px-8 lg:px-16 lg:py-16 2xl:max-w-[1560px] ${
+          className={`relative mx-auto w-full max-w-[1440px] px-6 py-24 transition-[transform,opacity] duration-700 ease-out sm:px-8 lg:py-20 lg:pl-16 lg:pr-20 2xl:max-w-[1560px] ${
             settled ? "md:scale-100 md:opacity-100" : "md:scale-[0.96] md:opacity-50"
           }`}
         >
@@ -313,7 +345,7 @@ function SectionMark({
         <span className={`font-mono text-[11px] ${tone === "dark" ? "text-signal-warm" : "text-terra-deep"}`}>
           {index}
         </span>
-        <h2 className="text-2xl font-semibold tracking-[-0.025em] sm:text-3xl">{title}</h2>
+        <h2 className="text-balance text-2xl font-semibold tracking-[-0.025em] sm:text-3xl">{title}</h2>
       </div>
       {aside ? <p className="max-w-[46ch] text-sm opacity-80">{aside}</p> : null}
     </div>
@@ -322,7 +354,7 @@ function SectionMark({
 
 function Terminal() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-paper/20 bg-term shadow-[0_28px_70px_-32px_rgba(0,0,0,0.7)]">
+    <div className="overflow-hidden rounded-2xl border border-paper/20 bg-term shadow-[0_30px_80px_-34px_rgba(4,38,27,0.8)]">
       <div className="flex items-center gap-1.5 border-b border-paper/12 px-4 py-3">
         <span className="h-2.5 w-2.5 rounded-full bg-mac-red" />
         <span className="h-2.5 w-2.5 rounded-full bg-mac-amber" />
@@ -340,12 +372,12 @@ function Terminal() {
         <p>
           <span className="text-signal">➜</span> <span className="text-paper/70">stats</span>
         </p>
-        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
+        <dl className="grid grid-cols-[110px_1fr] gap-x-4 gap-y-1">
           {terminalStats.map(([k, v]) => (
-            <div key={k} className="col-span-2 grid grid-cols-[110px_1fr] gap-x-4">
+            <Fragment key={k}>
               <dt className="text-paper/70">{k}</dt>
-              <dd className="text-paper/90">{v}</dd>
-            </div>
+              <dd className="font-medium tabular-nums text-paper/90">{v}</dd>
+            </Fragment>
           ))}
         </dl>
       </div>
@@ -506,23 +538,23 @@ function Metro() {
       <circle className="fill-signal stroke-signal" cx={CW_X} cy={CW_Y} r={6} />
 
       {/* Station labels */}
-      <g className="font-mono text-[10.5px] fill-paper/65">
+      <g className="font-mono text-[12px] fill-paper/65">
         {metroStations.map((s) => (
-          <text key={s.period + s.role} x={s.x} y={s.y + (s.above ? -58 : 40)} textAnchor="middle">
+          <text key={s.period + s.role} x={s.x} y={s.y + (s.above ? -62 : 42)} textAnchor="middle">
             {s.period}
           </text>
         ))}
       </g>
-      <g className="font-sans text-[12.5px] font-semibold fill-paper">
+      <g className="font-sans text-[14px] font-semibold fill-paper">
         {metroStations.map((s) => (
-          <text key={s.role} x={s.x} y={s.y + (s.above ? -42 : 58)} textAnchor="middle">
+          <text key={s.role} x={s.x} y={s.y + (s.above ? -45 : 62)} textAnchor="middle">
             {s.role}
           </text>
         ))}
       </g>
-      <g className="font-sans text-[10.5px] fill-paper/70">
+      <g className="font-sans text-[12px] fill-paper/70">
         {metroStations.map((s) => (
-          <text key={s.org} x={s.x} y={s.y + (s.above ? -26 : 76)} textAnchor="middle">
+          <text key={s.org} x={s.x} y={s.y + (s.above ? -28 : 80)} textAnchor="middle">
             {s.org}
           </text>
         ))}
@@ -530,35 +562,35 @@ function Metro() {
 
       {/* Transfer label */}
       <g textAnchor="middle">
-        <text className="font-mono text-[10.5px] fill-paper/65" x={TRANSFER_X} y="128">
+        <text className="font-mono text-[12px] fill-paper/65" x={TRANSFER_X} y="124">
           2023
         </text>
-        <text className="font-sans text-[12.5px] font-semibold fill-signal" x={TRANSFER_X} y="144">
+        <text className="font-sans text-[14px] font-semibold fill-signal" x={TRANSFER_X} y="142">
           Lahore to Warsaw
         </text>
       </g>
 
       {/* Cushman interchange label */}
       <g textAnchor="middle">
-        <text className="font-sans text-[12.5px] font-semibold fill-paper" x={CW_X} y="212">
+        <text className="font-sans text-[14px] font-semibold fill-paper" x={CW_X} y="212">
           Cushman &amp; Wakefield
         </text>
-        <text className="font-sans text-[10px] fill-paper/75" x={CW_X} y="232">
+        <text className="font-sans text-[11.5px] fill-paper/75" x={CW_X} y="234">
           Junior BI Analyst · 2024 to 2025
         </text>
-        <text className="font-sans text-[10px] fill-paper/75" x={CW_X} y="250">
+        <text className="font-sans text-[11.5px] fill-paper/75" x={CW_X} y="252">
           BI Analyst · 2025 to 2026
         </text>
-        <text className="font-sans text-[10px] fill-signal" x={CW_X} y="268">
+        <text className="font-sans text-[11.5px] fill-signal" x={CW_X} y="270">
           Analytics Engineer · 2026 to Present
         </text>
       </g>
 
       {/* City labels */}
-      <text className="font-mono text-[10.5px] uppercase tracking-[0.16em] fill-paper/70" x="16" y="40">
+      <text className="font-mono text-[11.5px] uppercase tracking-[0.16em] fill-paper/70" x="16" y="40">
         Lahore, PK
       </text>
-      <text className="font-mono text-[10.5px] uppercase tracking-[0.16em] fill-paper/70" x="1384" y="40" textAnchor="end">
+      <text className="font-mono text-[11.5px] uppercase tracking-[0.16em] fill-paper/70" x="1384" y="40" textAnchor="end">
         Warsaw, PL
       </text>
     </svg>
@@ -569,36 +601,110 @@ function Metro() {
 /* Deck                                                                */
 /* ------------------------------------------------------------------ */
 
+/* Layout effects run before paint in the browser; the server render
+   (static export) falls back to a plain effect, which is why the
+   measurement never blocks hydration. */
+const useIsoLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+type CopyState = "idle" | "copied" | "failed";
+
+/* The header is 64px tall (h-16). The chrome colour flips only once the
+   incoming panel has covered the header band. Using the viewport midpoint
+   instead made the bar change colour while the previous panel was still
+   the thing sitting behind it. */
+const CHROME_LINE = 48;
+
 export function Deck() {
   const [active, setActive] = useState(0);
+  const [chrome, setChrome] = useState(0);
   const [menu, setMenu] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [copyState, setCopyState] = useState<CopyState>("idle");
+  const [stacked, setStacked] = useState<boolean[]>(() =>
+    PANELS.map(() => false),
+  );
   const panelsRef = useRef<HTMLElement[]>([]);
   const offsetsRef = useRef<number[]>([]);
   const headerRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const copyTimer = useRef<number | undefined>(undefined);
   const { scrollY } = useScroll();
 
-  const measure = useCallback(() => {
-    offsetsRef.current = panelsRef.current.map((el) => el.offsetTop);
-  }, []);
-
-  useEffect(() => {
-    panelsRef.current = Array.from(document.querySelectorAll<HTMLElement>("[data-deck]"));
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [measure]);
-
-  useMotionValueEvent(scrollY, "change", (v) => {
-    const mid = v + window.innerHeight * 0.5;
+  /* Two indices, because they answer different questions.
+     active  - which panel owns the middle of the screen. Drives the
+               settle effect and the rail's aria-current.
+     chrome  - which panel is actually behind the fixed header. Drives
+               every colour in the chrome, so the bar is never tinted for
+               a panel that has not arrived yet. */
+  const syncIndices = useCallback((v: number) => {
     const offs = offsetsRef.current;
+    if (!offs.length) return;
+
+    const mid = v + window.innerHeight * 0.5;
     let idx = 0;
     for (let i = 0; i < offs.length; i++) {
       if (offs[i] <= mid) idx = i;
     }
     setActive(idx);
-  });
+
+    let chromeIdx = 0;
+    for (let i = 0; i < offs.length; i++) {
+      if (offs[i] <= v + CHROME_LINE) chromeIdx = i;
+    }
+    setChrome(chromeIdx);
+
+    const isScrolled = v > 8;
+    setScrolled((prev) => (prev === isScrolled ? prev : isScrolled));
+  }, []);
+
+  /* Measure panel offsets, and decide per panel whether its content
+     actually fits the viewport. A panel is only pinned when it does,
+     so a tall panel can never be cropped by its own sticky box. */
+  const measure = useCallback(() => {
+    if (typeof window === "undefined") return;
+    offsetsRef.current = panelsRef.current.map((el) => el.offsetTop);
+    // A resize or a late font can move the panels, so resync both
+    // indices rather than waiting for the next scroll event.
+    syncIndices(window.scrollY);
+
+    const wide = window.matchMedia("(min-width: 768px)").matches;
+    const room = window.innerHeight;
+    const next = panelsRef.current.map((el) => {
+      const inner = el.querySelector<HTMLElement>(".deck-pin > div");
+      if (!inner) return false;
+      // offsetHeight ignores the settle transform, so this is the real
+      // laid-out height of the panel content plus its padding.
+      return wide && inner.offsetHeight <= room;
+    });
+    setStacked((prev) =>
+      prev.length === next.length && prev.every((v, i) => v === next[i])
+        ? prev
+        : next,
+    );
+  }, [syncIndices]);
+
+  useIsoLayoutEffect(() => {
+    panelsRef.current = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-deck]"),
+    );
+    measure();
+
+    window.addEventListener("resize", measure);
+    // Content height also changes when fonts land, when the mobile
+    // browser chrome resizes the viewport, or when copy is edited.
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.documentElement);
+    const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
+    fonts?.ready.then(measure).catch(() => {});
+
+    return () => {
+      window.removeEventListener("resize", measure);
+      observer.disconnect();
+    };
+  }, [measure]);
+
+  useMotionValueEvent(scrollY, "change", syncIndices);
 
   useEffect(() => {
     if (!menu) return;
@@ -621,12 +727,56 @@ export function Deck() {
     };
   }, [menu]);
 
-  const dark = theme[active] === "dark";
+  useEffect(() => () => window.clearTimeout(copyTimer.current), []);
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText("husnainchnaz@outlook.com");
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
+  // Chrome colour follows the panel behind the header, not the one at the
+  // middle of the screen, so the bar never inverts over the wrong panel.
+  const chromeTone = PANELS[chrome]?.tone ?? "forest";
+  const chromeDark = DARK_TONES.includes(chromeTone);
+
+  // The rail is vertically centred, so it sits on whichever panel owns the
+  // middle of the screen and follows that one instead of the header.
+  const railTone = PANELS[active]?.tone ?? "forest";
+  const railDark = DARK_TONES.includes(railTone);
+
+  const panelProps = (i: number) => ({
+    index: i,
+    active,
+    tone: (DARK_TONES.includes(PANELS[i].tone) ? "dark" : "light") as
+      | "dark"
+      | "light",
+    toneName: PANELS[i].tone,
+    stacked: stacked[i] ?? false,
+  });
+
+  /* The async clipboard API fails outside a secure context, on denied
+     permission, or in older Safari. Fall back to a selection copy and
+     only claim success when the text actually reached the clipboard. */
+  const copyEmail = async () => {
+    window.clearTimeout(copyTimer.current);
+    let ok = false;
+
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      ok = true;
+    } catch {
+      try {
+        const field = document.createElement("textarea");
+        field.value = EMAIL;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.appendChild(field);
+        field.select();
+        ok = document.execCommand("copy");
+        document.body.removeChild(field);
+      } catch {
+        ok = false;
+      }
+    }
+
+    setCopyState(ok ? "copied" : "failed");
+    copyTimer.current = window.setTimeout(() => setCopyState("idle"), 2600);
   };
 
   return (
@@ -634,13 +784,14 @@ export function Deck() {
       {/* Fixed chrome */}
       <header
         ref={headerRef}
-        className={`no-print fixed inset-x-0 top-0 z-50 ${
-          dark ? "focus-on-dark" : "focus-on-light"
+        data-scrolled={scrolled ? "true" : "false"}
+        className={`no-print chrome-scrim tone-${chromeTone} fixed inset-x-0 top-0 z-50 ${
+          chromeDark ? "focus-on-dark" : "focus-on-light"
         }`}
       >
         <div
-          className={`mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-6 transition-colors duration-1000 ease-out sm:px-8 lg:px-16 2xl:max-w-[1560px] ${
-            dark ? "text-paper" : "text-ink"
+          className={`relative mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-6 transition-colors duration-500 ease-out sm:px-8 lg:pl-16 lg:pr-20 2xl:max-w-[1560px] ${
+            chromeDark ? "text-paper" : "text-ink"
           }`}
         >
           <a href="#intro" className="shrink-0 text-sm font-medium tracking-tight">
@@ -677,8 +828,8 @@ export function Deck() {
           <div className="flex items-center gap-2">
             <a
               href="#contact"
-              className={`hidden items-center gap-1.5 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-transform hover:-translate-y-px sm:inline-flex ${
-                dark ? "bg-paper text-ink" : "bg-ink text-paper"
+              className={`hidden items-center gap-1.5 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-[transform,background-color,color] duration-300 ease-out hover:-translate-y-px active:translate-y-0 sm:inline-flex ${
+                chromeDark ? "bg-paper text-ink" : "bg-ink text-paper"
               }`}
             >
               Get in touch
@@ -689,8 +840,9 @@ export function Deck() {
               type="button"
               onClick={() => setMenu((v) => !v)}
               aria-expanded={menu}
+              aria-controls="deck-mobile-nav"
               aria-label={menu ? "Close menu" : "Open menu"}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-current md:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-current transition-transform active:scale-[0.96] md:hidden"
             >
               {menu ? <X className="h-5 w-5" strokeWidth={1.75} /> : <Menu className="h-5 w-5" strokeWidth={1.75} />}
             </button>
@@ -699,8 +851,9 @@ export function Deck() {
 
         {menu && (
           <div
-            className={`border-t px-6 py-4 md:hidden ${
-              dark ? "border-paper/20 bg-ink text-paper" : "border-ink/15 bg-paper text-ink"
+            id="deck-mobile-nav"
+            className={`relative border-t px-6 py-4 md:hidden ${
+              chromeDark ? "border-paper/20 bg-ink text-paper" : "border-ink/15 bg-paper text-ink"
             }`}
           >
             <ul className="flex flex-col">
@@ -710,7 +863,7 @@ export function Deck() {
                     href={l.href}
                     onClick={() => setMenu(false)}
                     className={`block border-b py-3 text-sm last:border-b-0 ${
-                      dark ? "border-paper/15" : "border-ink/12"
+                      chromeDark ? "border-paper/15" : "border-ink/12"
                     }`}
                   >
                     {l.label}
@@ -722,19 +875,20 @@ export function Deck() {
         )}
       </header>
 
-      {/* Progress rail */}
+      {/* Progress rail. The rail lives in the gutter created by the
+          container's lg:pr-20, so it never sits on panel content. */}
       <div
-        className={`no-print fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end transition-colors duration-1000 ease-out lg:flex ${
-          dark ? "focus-on-dark text-paper" : "focus-on-light text-ink"
+        className={`no-print fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end transition-colors duration-500 ease-out lg:flex ${
+          railDark ? "focus-on-dark text-paper" : "focus-on-light text-ink"
         }`}
       >
-        {["Intro", "Work", "Toolkit", "Journey", "Bench", "Record", "Contact"].map((label, i) => (
+        {PANELS.map((p, i) => (
           <a
-            key={label}
-            href={`#${["intro", "work", "toolkit", "journey", "bench", "record", "contact"][i]}`}
-            aria-label={label}
+            key={p.id}
+            href={`#${p.id}`}
+            aria-label={p.label}
             aria-current={active === i ? "true" : undefined}
-            className="group flex min-h-11 items-center gap-3 px-1"
+            className="group flex min-h-11 items-center gap-2 px-1"
           >
             <span
               className={`font-mono text-[10px] tracking-[0.14em] transition-opacity ${
@@ -745,20 +899,20 @@ export function Deck() {
             </span>
             <span
               className={`h-px bg-current transition-all duration-700 ease-out ${
-                active === i ? "w-7" : "w-3 opacity-60"
+                active === i ? "w-5" : "w-3 opacity-60"
               }`}
             />
           </a>
         ))}
       </div>
 
-      <main className="relative">
+      <main id="main" className="relative">
         {/* 0 - INTRO */}
-        <Panel id="intro" index={0} active={active} tone={theme[0]} className="bg-forest text-paper">
+        <Panel id="intro" {...panelProps(0)} className="bg-forest text-paper">
           <div className="grid grid-cols-1 gap-y-12 lg:grid-cols-12 lg:gap-x-14">
             <div className="lg:col-span-7">
               <Reveal>
-                <h1 className="max-w-[18ch] text-[2.6rem] font-semibold leading-[0.98] tracking-[-0.04em] sm:text-6xl lg:text-7xl 2xl:text-8xl">
+                <h1 className="max-w-[18ch] text-balance text-[2.6rem] font-semibold leading-[0.98] tracking-[-0.04em] sm:text-6xl lg:text-7xl 2xl:text-8xl">
                   Analytics, AI, and the systems around them.
                 </h1>
               </Reveal>
@@ -772,7 +926,7 @@ export function Deck() {
                 <div className="mt-9 flex flex-wrap items-center gap-3">
                   <a
                     href="#work"
-                    className="group inline-flex items-center gap-2 rounded-lg bg-paper px-5 py-3 text-sm font-medium text-ink transition-transform hover:-translate-y-px"
+                    className="group inline-flex items-center gap-2 rounded-lg bg-paper px-5 py-3 text-sm font-medium text-ink transition-transform hover:-translate-y-px active:translate-y-0"
                   >
                     View work
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={1.75} />
@@ -795,12 +949,14 @@ export function Deck() {
           </div>
 
           <Reveal delay={0.22}>
-            <div className="mt-10 grid grid-cols-2 gap-x-8 gap-y-6 border-t border-paper/25 pt-6 sm:grid-cols-4">
+            {/* Each employer carries its own rule so the signal dot always
+                sits on a line, including when the strip wraps to two rows. */}
+            <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-4">
               {employers.map((e) => (
-                <div key={e} className="relative">
+                <div key={e} className="relative border-t border-paper/25 pt-5">
                   <span
                     aria-hidden
-                    className="absolute -top-7 left-0 h-2 w-2 rounded-full bg-signal"
+                    className="absolute -top-[3.5px] left-0 h-2 w-2 rounded-full bg-signal"
                   />
                   <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-paper/75">
                     {e}
@@ -812,7 +968,7 @@ export function Deck() {
         </Panel>
 
         {/* 1 - WORK */}
-        <Panel id="work" index={1} active={active} tone={theme[1]} className="bg-paper text-ink">
+        <Panel id="work" {...panelProps(1)} className="bg-paper text-ink">
           <Reveal>
             <SectionMark
               index="01"
@@ -838,7 +994,7 @@ export function Deck() {
                 <p className="mt-4 max-w-[62ch] text-sm leading-relaxed text-paper/85 lg:text-[15px]">
                   {flagship.summary}
                 </p>
-                <ul className="mt-6 grid grid-cols-1 gap-x-6 gap-y-2 border-t border-paper/25 pt-5 sm:grid-cols-2">
+                <ul className="mt-7 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
                   {flagship.capabilities.map((c) => (
                     <li key={c} className="flex items-center gap-2 text-sm text-paper/85">
                       <span className="h-1 w-1 shrink-0 rounded-full bg-paper/70" />
@@ -846,7 +1002,7 @@ export function Deck() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-6 flex flex-wrap gap-1.5 pt-1">
+                <div className="mt-auto flex flex-wrap gap-1.5 border-t border-paper/25 pt-5">
                   {flagship.tags.map((t) => (
                     <span key={t} className="rounded-md border border-paper/30 px-2.5 py-1 font-mono text-[11px] text-paper/85">
                       {t}
@@ -871,7 +1027,7 @@ export function Deck() {
                       <p className="mt-1 text-sm text-muted">
                         {item.org} · {item.category}
                       </p>
-                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted">{item.detail}</p>
+                      <p className="mt-2 text-sm leading-relaxed text-muted">{item.detail}</p>
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {item.tags.map((t) => (
                           <span key={t} className="rounded-md border border-line px-2.5 py-1 font-mono text-[11px] text-muted">
@@ -897,7 +1053,7 @@ export function Deck() {
         </Panel>
 
         {/* 2 - TOOLKIT */}
-        <Panel id="toolkit" index={2} active={active} tone={theme[2]} className="bg-sand text-ink">
+        <Panel id="toolkit" {...panelProps(2)} className="bg-sand text-ink">
           <Reveal>
             <SectionMark
               index="02"
@@ -927,7 +1083,7 @@ export function Deck() {
                       </span>
                       <div className="min-w-0">
                         <h3 className="text-base font-semibold leading-tight">{t.group}</h3>
-                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] opacity-90">
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em]">
                           {t.purpose} · {t.items.length}
                         </p>
                       </div>
@@ -936,7 +1092,7 @@ export function Deck() {
                       {t.items.map((item) => (
                         <li
                           key={item}
-                          className="rounded-md border border-paper/30 px-2 py-1 font-mono text-[11px] opacity-90"
+                          className="rounded-md border border-paper/30 px-2 py-1 font-mono text-[11px]"
                         >
                           {item}
                         </li>
@@ -948,8 +1104,14 @@ export function Deck() {
             })}
 
             <Reveal delay={0.22} className="lg:col-span-4">
-              <div className="flex h-full flex-col rounded-2xl border border-ink/20 bg-paper/60 p-5 lg:p-6">
-                <div className="flex items-start gap-3">
+              <div className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-paper p-5 lg:p-6">
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -bottom-7 right-1 text-[96px] font-bold leading-none text-ink opacity-[0.08]"
+                >
+                  05
+                </span>
+                <div className="relative flex items-start gap-3">
                   <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink text-paper">
                     <Globe className="h-[18px] w-[18px]" strokeWidth={1.75} />
                   </span>
@@ -960,11 +1122,11 @@ export function Deck() {
                     </p>
                   </div>
                 </div>
-                <ul className="mt-5 flex flex-wrap gap-1.5">
+                <ul className="relative mt-5 flex flex-wrap gap-1.5">
                   {languages.map((lang) => (
                     <li
                       key={lang}
-                      className="rounded-md border border-ink/15 px-2 py-1 font-mono text-[11px] text-ink/80"
+                      className="rounded-md border border-line-strong px-2 py-1 font-mono text-[11px] text-muted"
                     >
                       {lang}
                     </li>
@@ -976,7 +1138,7 @@ export function Deck() {
         </Panel>
 
         {/* 3 - JOURNEY */}
-        <Panel id="journey" index={3} active={active} tone={theme[3]} className="bg-ink text-paper">
+        <Panel id="journey" {...panelProps(3)} className="bg-ink text-paper">
           <Reveal>
             <SectionMark
               index="03"
@@ -987,7 +1149,7 @@ export function Deck() {
           </Reveal>
 
           <Reveal delay={0.06}>
-            <div className="mx-auto mt-6 hidden max-w-[1140px] lg:block">
+            <div className="mx-auto mt-6 hidden max-w-[1280px] lg:block">
               <Metro />
             </div>
           </Reveal>
@@ -1030,7 +1192,7 @@ export function Deck() {
         </Panel>
 
         {/* 4 - BENCH */}
-        <Panel id="bench" index={4} active={active} tone={theme[4]} className="bg-paper text-ink">
+        <Panel id="bench" {...panelProps(4)} className="bg-paper text-ink">
           <Reveal>
             <SectionMark
               index="04"
@@ -1039,48 +1201,57 @@ export function Deck() {
             />
           </Reveal>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* An editorial list rather than a card grid: every project carries
+              equal weight, so none of them has to pretend to be the lead. */}
+          <ol className="mt-8 grid grid-cols-1 gap-x-14 lg:grid-cols-2">
             {bench.map((e, i) => (
-              <Reveal key={e.name} delay={i * 0.04}>
-                <article className="flex h-full flex-col border border-ink/12 bg-white/50 p-5">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-terra-deep">
-                    {e.kind}
-                  </span>
-                  <h3 className="mt-2 text-base font-semibold tracking-[-0.01em]">{e.name}</h3>
-                  <p className="mt-2 line-clamp-2 text-[13px] leading-relaxed text-muted">{e.about}</p>
-                  <div className="mt-auto pt-4">
-                    <div className="flex flex-wrap gap-1.5">
-                      {e.stack.map((s) => (
-                        <span key={s} className="rounded-md border border-line px-2 py-1 font-mono text-[10.5px] text-muted">
-                          {s}
+              <li key={e.name}>
+                <Reveal delay={i * 0.04}>
+                  <article className="flex gap-4 border-t border-line py-5 sm:gap-6">
+                    <span className="shrink-0 pt-0.5 font-mono text-[11px] tabular-nums text-terra-deep">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                        <h3 className="text-base font-semibold tracking-[-0.015em]">{e.name}</h3>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+                          {e.kind}
                         </span>
-                      ))}
+                      </div>
+                      <p className="mt-1.5 max-w-[62ch] text-[13px] leading-relaxed text-muted">
+                        {e.about}
+                      </p>
+                      <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
+                        <span className="font-mono text-[10.5px] text-faint">
+                          {e.stack.join(" · ")}
+                        </span>
+                        <a
+                          href={e.repo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-[13px] text-ink transition-colors hover:text-terra"
+                        >
+                          Repository
+                          <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+                        </a>
+                      </div>
                     </div>
-                    <a
-                      href={e.repo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-3 inline-flex items-center gap-1.5 py-1 text-sm text-ink transition-colors hover:text-terra"
-                    >
-                      Repository
-                      <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
-                    </a>
-                  </div>
-                </article>
-              </Reveal>
+                  </article>
+                </Reveal>
+              </li>
             ))}
-          </div>
+          </ol>
         </Panel>
 
         {/* 5 - RECORD */}
-        <Panel id="record" index={5} active={active} tone={theme[5]} className="bg-ink text-paper">
+        <Panel id="record" {...panelProps(5)} className="bg-ink text-paper">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
             <Reveal className="lg:col-span-6">
               <SectionMark
                 index="05"
                 title="Record"
                 tone="dark"
-                aside="The moves, and the things outside the work."
+                aside="The moves, the certificates, and the things outside the work."
               />
               <p className="mt-6 max-w-[56ch] text-sm leading-relaxed text-paper/80">
                 A short thread of the moves. The rest (music, games, the kitchen, and a camera) sits
@@ -1095,6 +1266,21 @@ export function Deck() {
                   </div>
                 ))}
               </div>
+
+              <h3 className="mt-9 font-mono text-[11px] uppercase tracking-[0.16em] text-paper/60">
+                Certifications
+              </h3>
+              <ul className="mt-4">
+                {certifications.map((c) => (
+                  <li
+                    key={c}
+                    className="flex items-center gap-2.5 border-t border-paper/15 py-2.5 text-sm text-paper/85"
+                  >
+                    <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-signal" />
+                    {c}
+                  </li>
+                ))}
+              </ul>
             </Reveal>
 
             <Reveal delay={0.1} className="lg:col-span-6">
@@ -1112,12 +1298,12 @@ export function Deck() {
         </Panel>
 
         {/* 6 - CONTACT */}
-        <Panel id="contact" index={6} active={active} tone={theme[6]} className="bg-terra text-paper">
+        <Panel id="contact" {...panelProps(6)} className="bg-terra text-paper">
           <Reveal>
-            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-paper/85">
+            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-paper">
               06 / Contact
             </span>
-            <h2 className="mt-5 max-w-[22ch] text-3xl font-semibold leading-[1.05] tracking-[-0.03em] sm:text-4xl lg:text-5xl 2xl:text-6xl">
+            <h2 className="mt-5 max-w-[22ch] text-balance text-3xl font-semibold leading-[1.05] tracking-[-0.03em] sm:text-4xl lg:text-5xl 2xl:text-6xl">
               Open to senior BI, applied AI, and data engineering roles.
             </h2>
           </Reveal>
@@ -1130,44 +1316,54 @@ export function Deck() {
                   className="group inline-flex items-center gap-2 text-lg font-medium sm:text-xl"
                 >
                   <span className="border-b border-paper/60 pb-0.5 transition-colors group-hover:border-paper">
-                    husnainchnaz@outlook.com
+                    {EMAIL}
                   </span>
                   <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} />
                 </a>
                 <button
                   type="button"
                   onClick={copyEmail}
-                  className="inline-flex items-center gap-2 rounded-lg border border-paper/40 px-3 py-2.5 text-sm text-paper/90 transition-colors hover:border-paper/70 hover:text-paper"
+                  className="inline-flex items-center gap-2 rounded-lg border border-paper/40 px-3 py-2.5 text-sm text-paper transition-colors hover:border-paper/70 active:scale-[0.98]"
                 >
-                  {copied ? <Check className="h-4 w-4" strokeWidth={2} /> : <Copy className="h-4 w-4" strokeWidth={1.75} />}
-                  {copied ? "Copied" : "Copy email"}
-                  <span className="sr-only" role="status" aria-live="polite">
-                    {copied ? "Email copied" : ""}
-                  </span>
+                  {copyState === "copied" && <Check className="h-4 w-4" strokeWidth={2} />}
+                  {copyState === "failed" && <AlertCircle className="h-4 w-4" strokeWidth={2} />}
+                  {copyState === "idle" && <Copy className="h-4 w-4" strokeWidth={1.75} />}
+                  {copyState === "copied"
+                    ? "Copied"
+                    : copyState === "failed"
+                      ? "Copy failed"
+                      : "Copy email"}
                 </button>
+                <span role="status" aria-live="polite" className="sr-only">
+                  {copyState === "copied"
+                    ? "Email address copied to clipboard"
+                    : copyState === "failed"
+                      ? `Copy failed. The address is ${EMAIL}`
+                      : ""}
+                </span>
               </div>
 
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/resume"
-                  className="inline-flex items-center gap-2 rounded-lg bg-paper px-4 py-3 text-sm font-medium text-ink transition-transform hover:-translate-y-px"
+                  className="inline-flex items-center gap-2 rounded-lg bg-paper px-4 py-3 text-sm font-medium text-ink transition-transform hover:-translate-y-px active:translate-y-0"
                 >
                   Résumé
                   <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
                 </Link>
                 <a
-                  href="https://github.com/husnain-mustafa"
+                  href={GITHUB}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg border border-paper/40 px-4 py-3 text-sm transition-colors hover:border-paper/70"
+                  className="rounded-lg border border-paper/40 px-4 py-3 text-sm transition-colors hover:border-paper/70 active:scale-[0.98]"
                 >
                   GitHub
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/husnain-mustafa/"
+                  href={LINKEDIN}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg border border-paper/40 px-4 py-3 text-sm transition-colors hover:border-paper/70"
+                  className="rounded-lg border border-paper/40 px-4 py-3 text-sm transition-colors hover:border-paper/70 active:scale-[0.98]"
                 >
                   LinkedIn
                 </a>
@@ -1176,13 +1372,13 @@ export function Deck() {
           </Reveal>
 
           <Reveal delay={0.14}>
-            <footer className="mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-paper/30 pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-paper/85">
+            <footer className="mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-paper/30 pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-paper">
               <span className="inline-flex items-center gap-2">
                 <MapPin className="h-3.5 w-3.5" strokeWidth={1.75} />
                 Warsaw, Poland
               </span>
               <span className="inline-flex items-center gap-2">
-                <Mail className="h-3.5 w-3.5" strokeWidth={1.75} />
+                <Languages className="h-3.5 w-3.5" strokeWidth={1.75} />
                 {LANGUAGES}
               </span>
               <span>© {new Date().getFullYear()} Husnain Mustafa</span>

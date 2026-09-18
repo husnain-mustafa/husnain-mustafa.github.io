@@ -78,3 +78,6 @@ redesign-*.html
 toolkit-concepts.html
 journey-concepts.html
 og-card.html
+
+# Local design-audit harness and screenshots (not part of the site)
+.audit-shots/

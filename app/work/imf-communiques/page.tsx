@@ -14,6 +14,30 @@ export const metadata: Metadata = {
   title: "IMF Text Analysis: the effect of dictionary balance | Husnain Mustafa",
   description:
     "Master's thesis finding: how dictionary balance decides which topics text analysis can detect, across 173 IMF communiqués and 564 constituency statements.",
+  alternates: { canonical: "/work/imf-communiques/" },
+  openGraph: {
+    type: "article",
+    url: "/work/imf-communiques/",
+    siteName: "Husnain Mustafa",
+    title: "What text analysis can see depends on the dictionary you hand it",
+    description:
+      "Two decades of IMF communication scored twice with one variable changed. Under the unbalanced dictionary, Debt scored zero for every country.",
+    images: [
+      {
+        url: "/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Husnain Mustafa, Analytics Engineer, Warsaw",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "What text analysis can see depends on the dictionary you hand it",
+    description:
+      "Two decades of IMF communication scored twice with one variable changed: dictionary balance.",
+    images: ["/og.jpg"],
+  },
 };
 
 const meta = [
@@ -26,10 +50,13 @@ const meta = [
 
 export default function ImfCaseStudy() {
   return (
-    <div className="relative min-h-dvh bg-bg text-ink antialiased">
+    <div className="relative flex min-h-dvh flex-col bg-bg text-ink antialiased">
       <SiteHeader />
 
-      <main className="relative z-10 mx-auto max-w-[1120px] px-6 pb-24 pt-16 sm:pt-20 lg:pt-24">
+      <main
+        id="main"
+        className="relative z-10 mx-auto w-full max-w-[1120px] flex-1 px-6 pb-24 pt-12 sm:pt-14 lg:pt-16"
+      >
         <Link
           href="/#work"
           className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-faint transition-colors hover:text-ink"
@@ -42,10 +69,10 @@ export default function ImfCaseStudy() {
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
             Case study
           </span>
-          <h1 className="mt-5 max-w-[22ch] text-3xl font-medium leading-[1.1] tracking-[-0.03em] text-ink sm:text-4xl lg:text-5xl">
+          <h1 className="mt-5 max-w-[22ch] text-balance text-3xl font-semibold leading-[1.08] tracking-[-0.035em] text-ink sm:text-4xl lg:text-5xl">
             What text analysis can see depends on the dictionary you hand it
           </h1>
-          <p className="mt-6 max-w-[72ch] text-base leading-relaxed text-muted">
+          <p className="mt-6 max-w-[66ch] text-base leading-relaxed text-muted">
             Two decades of IMF communication, scored twice with the same pipeline. One variable
             changed: dictionary balance. Under the unbalanced dictionary, Debt scored{" "}
             <span className="text-ink">exactly zero for every single country</span>, and every
@@ -68,15 +95,15 @@ export default function ImfCaseStudy() {
         </header>
 
         <section className="mt-16">
-          <h2 className="text-xl font-medium tracking-tight text-ink sm:text-2xl">The question</h2>
-          <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
+          <h2 className="text-balance text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl">The question</h2>
+          <p className="mt-4 max-w-[66ch] text-sm leading-relaxed text-muted">
             Named-entity and topical dictionaries are rarely balanced. A lexicon of finance terms
             carries far more words for crisis and risk than for reform or climate, and term counts
             per topic run into the hundreds versus a handful. The thesis asks an uncomfortable
             question of a method that economists increasingly rely on: if the dictionary is skewed,
             is the model describing the world, or describing the dictionary?
           </p>
-          <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
+          <p className="mt-4 max-w-[66ch] text-sm leading-relaxed text-muted">
             It builds directly on the IMF working paper{" "}
             <span className="text-ink">How Have IMF Priorities Evolved? A Text Mining Approach</span>{" "}
             (Medina, Gamba, Anderson et al., 2021), replicates that work with its unbalanced
@@ -87,10 +114,10 @@ export default function ImfCaseStudy() {
         </section>
 
         <section className="mt-14">
-          <h2 className="text-xl font-medium tracking-tight text-ink sm:text-2xl">
+          <h2 className="text-balance text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl">
             Finding 1: the collapse
           </h2>
-          <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
+          <p className="mt-4 max-w-[66ch] text-sm leading-relaxed text-muted">
             Across all 173 communiqués, the balanced dictionary produces a plausible spread of
             topics. The unbalanced one does not narrow so much as collapse: Crisis and Risk absorb
             88.5% of all topic assignments, Economic Growth falls from 47.8% to 4.4%, and Debt goes
@@ -101,10 +128,10 @@ export default function ImfCaseStudy() {
         </section>
 
         <section className="mt-16">
-          <h2 className="text-xl font-medium tracking-tight text-ink sm:text-2xl">
+          <h2 className="text-balance text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl">
             Finding 2: the unbalanced dictionary erases every country
           </h2>
-          <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
+          <p className="mt-4 max-w-[66ch] text-sm leading-relaxed text-muted">
             This is where it stops being abstract. Scored with the balanced dictionary, each
             authority has a recognisable profile: OPEC is 71% Economic Growth, China 51%, India 55%,
             Germany splits evenly between Growth and Debt, Japan carries the highest Crisis
@@ -118,10 +145,10 @@ export default function ImfCaseStudy() {
         </section>
 
         <section className="mt-16">
-          <h2 className="text-xl font-medium tracking-tight text-ink sm:text-2xl">
+          <h2 className="text-balance text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl">
             Finding 3: what the balanced dictionary reveals
           </h2>
-          <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
+          <p className="mt-4 max-w-[66ch] text-sm leading-relaxed text-muted">
             With the dictionary balanced, the corpus reads like an economic history. Crisis spikes to
             34% in 2009, exactly where the financial crisis sits. Debt collapses to 3% during the
             same window, then climbs to 41% in 2020 and stays near 40% into 2024. Economic Growth
@@ -132,10 +159,10 @@ export default function ImfCaseStudy() {
         </section>
 
         <section className="mt-16">
-          <h2 className="text-xl font-medium tracking-tight text-ink sm:text-2xl">
+          <h2 className="text-balance text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl">
             Finding 4: sentiment agrees, weakly
           </h2>
-          <p className="mt-4 max-w-[72ch] text-sm leading-relaxed text-muted">
+          <p className="mt-4 max-w-[66ch] text-sm leading-relaxed text-muted">
             Supplemental VADER sentiment moves with the same crises: dips in 2008 to 2009 (0.84, 0.83),
             2015 to 2016 (0.93, 0.94), 2020 (0.83) and 2022 (0.79), recovering to 0.99 in calm years. The
             direction is consistent with the topic findings; the magnitude is not trustworthy, since
@@ -149,7 +176,7 @@ export default function ImfCaseStudy() {
           <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
             Limitations, stated plainly
           </h2>
-          <ul className="mt-5 max-w-[72ch] space-y-3">
+          <ul className="mt-5 max-w-[66ch] space-y-3">
             {[
               "The balanced dictionaries were built by manual term selection guided by frequency analysis. That is a judgement call, and it introduces subjectivity even as it removes another kind.",
               "Communiqués span 1997 to 2024; constituency statements span 2004 to 2024. Coverage thins after 2017, fewer than five statements per year in places, so those points are noisy, and the thin-coverage band is drawn where that begins.",

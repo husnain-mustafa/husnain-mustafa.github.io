@@ -11,7 +11,14 @@ const links = [
   { label: "Journey", href: "/#journey" },
   { label: "Bench", href: "/#bench" },
   { label: "Record", href: "/#record" },
+  { label: "Résumé", href: "/resume" },
 ];
+
+function isCurrent(pathname: string, href: string) {
+  if (href.includes("#")) return false;
+  const clean = href.endsWith("/") ? href : `${href}/`;
+  return pathname === href || pathname === clean;
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -30,10 +37,14 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-5 text-sm md:flex">
           {links.map((l) => {
-            const isRoute = !l.href.includes("#");
-            const active = isRoute && pathname === l.href;
+            const active = isCurrent(pathname, l.href);
             return (
-              <Link key={l.href} href={l.href} className="group relative py-2">
+              <Link
+                key={l.href}
+                href={l.href}
+                aria-current={active ? "page" : undefined}
+                className="group relative py-2"
+              >
                 <span
                   className={`transition-opacity duration-500 ${
                     active ? "text-ink opacity-100" : "text-muted opacity-80 group-hover:opacity-100"

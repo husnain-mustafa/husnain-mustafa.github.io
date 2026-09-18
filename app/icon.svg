@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Husnain Mustafa">
+  <rect width="64" height="64" rx="14" fill="#0b4f3a"/>
+  <rect x="15" y="35" width="7.5" height="14" rx="2.5" fill="#f4f1ea"/>
+  <rect x="28.25" y="26" width="7.5" height="23" rx="2.5" fill="#f4f1ea"/>
+  <rect x="41.5" y="17" width="7.5" height="32" rx="2.5" fill="#f4f1ea"/>
+  <circle cx="45.25" cy="11.5" r="3.75" fill="#7fe0b6"/>
+</svg>

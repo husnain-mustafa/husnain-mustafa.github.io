@@ -10,8 +10,10 @@
   --paper: #f4f1ea;
   --ink: #0f0f10;
   --forest: #0b4f3a;
-  --terra: #b8442c;
-  --terra-deep: #a83d26;
+  /* Terra is deliberately deep enough that paper/85 clears AA on it.
+     At the previous #b8442c, paper/85 measured 3.88:1. */
+  --terra: #9c3520;
+  --terra-deep: #8a2e1b;
   --sand: #e7dfce;
   --cobalt: #173f7a;
 
@@ -20,7 +22,8 @@
   --line: rgba(15, 15, 16, 0.12);
   --line-strong: rgba(15, 15, 16, 0.24);
   --muted: #5d5a50;
-  --faint: #6e6c62;
+  /* Darkened from #6e6c62 so the grain overlay cannot push it under AA. */
+  --faint: #63615a;
   --accent: #0b4f3a;
   --accent-ink: #f4f1ea;
 
@@ -80,9 +83,11 @@ body {
 
 /* ============================================================
    DECK PANELS
-   Stacking only when the viewport is tall enough that a pinned
-   panel cannot clip its content. On short screens the deck falls
-   back to a normal document flow.
+   Stacking is opt-in per panel. The Deck component measures each
+   panel and sets [data-stack="true"] only when that panel's
+   content genuinely fits the viewport, so a panel can never be
+   taller than the area it is pinned into. Without JS (or before
+   measurement) every panel is a normal full-height block.
    ============================================================ */
 .deck-shell {
   position: relative;
@@ -90,19 +95,24 @@ body {
 }
 
 .deck-pin {
+  position: relative;
   display: flex;
   min-height: 100dvh;
   align-items: center;
 }
 
-@media (min-width: 768px) and (min-height: 720px) {
-  .deck-shell {
-    min-height: calc(100dvh + 30vh);
-  }
-  .deck-pin {
-    position: sticky;
-    top: 0;
-  }
+.deck-shell[data-stack="true"] {
+  min-height: calc(100dvh + 30vh);
+}
+
+.deck-shell[data-stack="true"] .deck-pin {
+  position: sticky;
+  top: 0;
+}
+
+/* Anchor jumps must clear the fixed header. */
+[data-deck] {
+  scroll-margin-top: 5rem;
 }
 
 /* Surfaces with dark backgrounds get a light focus ring, and
@@ -116,6 +126,137 @@ body {
 }
 
 /* ============================================================
+   SURFACE DEPTH
+   One off-centre light source per panel, plus film grain over the
+   whole document. Both are decorative and excluded from print.
+   ============================================================ */
+.deck-pin::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.wash-forest::before {
+  background: radial-gradient(
+    115% 85% at 10% -12%,
+    rgba(127, 224, 182, 0.16),
+    transparent 62%
+  );
+}
+
+.wash-ink::before {
+  background: radial-gradient(
+    120% 90% at 92% -8%,
+    rgba(127, 224, 182, 0.1),
+    transparent 58%
+  );
+}
+
+.wash-terra::before {
+  background: radial-gradient(
+    115% 85% at 8% -10%,
+    rgba(255, 206, 178, 0.16),
+    transparent 60%
+  );
+}
+
+.wash-paper::before {
+  background: radial-gradient(
+    110% 80% at 88% -12%,
+    rgba(23, 63, 122, 0.07),
+    transparent 58%
+  );
+}
+
+.wash-sand::before {
+  background: radial-gradient(
+    110% 80% at 6% -10%,
+    rgba(156, 53, 32, 0.08),
+    transparent 58%
+  );
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.045;
+  filter: grayscale(1) contrast(1.1);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Fixed chrome sits over scrolling content, so it carries a scrim
+   tinted to the active panel colour. */
+.tone-forest {
+  --panel-bg: var(--forest);
+}
+.tone-paper {
+  --panel-bg: var(--paper);
+}
+.tone-sand {
+  --panel-bg: var(--sand);
+}
+.tone-ink {
+  --panel-bg: var(--ink);
+}
+.tone-terra {
+  --panel-bg: var(--terra);
+}
+
+/* Fixed chrome sits over scrolling content, so it carries a scrim tinted to
+   the panel behind it. It is a solid colour behind a mask rather than a
+   gradient, because background-color can transition and a gradient cannot,
+   which is what made the bar snap between colours mid-scroll. */
+.chrome-scrim::before {
+  content: "";
+  position: absolute;
+  inset: -1px 0 auto 0;
+  height: calc(100% + 24px);
+  background-color: var(--panel-bg, transparent);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 52%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 100%);
+  opacity: 0;
+  transition:
+    opacity 400ms ease-out,
+    background-color 500ms ease-out;
+  pointer-events: none;
+}
+
+.chrome-scrim[data-scrolled="true"]::before {
+  opacity: 0.94;
+}
+
+/* ============================================================
+   SKIP LINK
+   ============================================================ */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 0.5rem;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.7rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: transform 200ms ease-out;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ============================================================
    PRINT
    ============================================================ */
 @media print {
@@ -126,12 +267,18 @@ body {
     --line-strong: rgba(0, 0, 0, 0.32);
     --ink: #000000;
     --muted: #2f2f2f;
-    --faint: #6b6b6b;
+    --faint: #4a4a4a;
     --accent: #000000;
     --accent-ink: #ffffff;
   }
 
-  .no-print {
+  .no-print,
+  .grain {
+    display: none !important;
+  }
+
+  .deck-pin::before,
+  .chrome-scrim::before {
     display: none !important;
   }
 
@@ -148,6 +295,7 @@ body {
 
   /* Unstack the deck so every panel prints in order */
   .deck-shell,
+  .deck-shell[data-stack="true"],
   .deck-pin {
     position: static !important;
     min-height: 0 !important;
